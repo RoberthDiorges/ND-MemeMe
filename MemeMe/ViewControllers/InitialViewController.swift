@@ -35,12 +35,12 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
     super.viewDidLoad()
     
     configKeyboard()
-    configTextFields()
+    configTextFields(textFields: [topTextField, bottomTextField])
     configCamera()
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    actionButton.isEnabled = imageView.image != nil ? true : false
+    actionButton.isEnabled = imageView.image != nil
     subscribeToKeyboardNotifications()
   }
   
@@ -52,7 +52,7 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
   
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
     if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-      imageView.contentMode = .scaleAspectFill
+      imageView.contentMode = .scaleAspectFit
       imageView.image = image
     }
     dismiss(animated: true, completion: nil)
@@ -135,9 +135,7 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
     cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
   }
   
-  func configTextFields() {
-    
-    textFields = [topTextField, bottomTextField]
+  func configTextFields(textFields: [UITextField]) {
     
     let multipleAttributes: [String : Any] = [
       NSAttributedStringKey.strokeColor.rawValue: UIColor.black,

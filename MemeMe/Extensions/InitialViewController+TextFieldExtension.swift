@@ -15,7 +15,7 @@ extension InitialViewController: UITextFieldDelegate {
   }
   
   func textFieldDidEndEditing(_ textField: UITextField) {
-    if textField.tag == 0 {
+    if self.topTextField.isFirstResponder {
       if (textField.text?.isEmpty)! {
         textField.text = DefautsTexts.top
       }
