@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension InitialViewController: UITextFieldDelegate {
+extension CreateMemeViewController: UITextFieldDelegate {
   
   func textFieldDidBeginEditing(_ textField: UITextField) {
     textField.text = ""

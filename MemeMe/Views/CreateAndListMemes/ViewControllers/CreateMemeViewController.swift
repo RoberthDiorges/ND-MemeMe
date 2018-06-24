@@ -1,5 +1,5 @@
 //
-//  InitialViewController.swift
+//  CreateMemeViewController.swift
 //  MemeMe
 //
 //  Created by Roberth on 26/04/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InitialViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   
   // MARK: Properties
   @IBOutlet weak var imageView: UIImageView!
@@ -17,6 +17,7 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
   @IBOutlet weak var topTextField: UITextField!
   @IBOutlet weak var bottomTextField: UITextField!
   @IBOutlet weak var toolbar: UIToolbar!
+  @IBOutlet weak var navigationBar: UINavigationBar!
   
   // MARK: Variables
   enum ButtonType: Int {
@@ -48,18 +49,17 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
     unsubscribeFromKeyboardNotifications()
   }
   
-  // MARK: Methods
-  
+  // MARK: Picker Controlls
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
     if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
       imageView.contentMode = .scaleAspectFit
       imageView.image = image
     }
-    dismiss(animated: true, completion: nil)
+    picker.dismiss(animated: true, completion: nil)
   }
   
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    
+    picker.dismiss(animated: true, completion: nil)
   }
   
   func pickAnImage(dataType: UIImagePickerControllerSourceType) {
@@ -70,9 +70,18 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
     present(imagePicker, animated: true, completion: nil)
   }
   
+  // MARK: - Auxiliary methods
+  func cutMeme(x: CGFloat, y: CGFloat) {
+    self.view.drawHierarchy(in: CGRect(x: x, y: y,
+                                       width: view.bounds.size.width,
+                                       height: view.bounds.size.height),
+                            afterScreenUpdates: true)
+  }
+  
   func save(memedImage: UIImage) {
     
     let meme = Meme(topText: topTextField.text, originalImage: imageView.image, memeImage: memedImage, bottomText: bottomTextField.text)
+    
     (UIApplication.shared.delegate as! AppDelegate).memes.append(meme)
     dismiss(animated: true, completion: nil)
   }
@@ -80,20 +89,34 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
   func generateMemedImage() -> UIImage {
     
     // Render view to an image
+    navigationBar.isHidden = true
     toolbar.isHidden = true
     
-    UIGraphicsBeginImageContext(self.view.frame.size)
-    view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
-    let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.size.width,
+                                                  height: imageView.frame.size.height), false, 0)
+    
+    switch UIApplication.shared.statusBarOrientation {
+    case .portrait, .portraitUpsideDown:
+      cutMeme(x: 0, y: -75)
+      break
+    case .landscapeLeft, .landscapeRight:
+      cutMeme(x: 0, y: -45)
+      break
+    case .unknown:
+      print("Erro")
+      break
+    }
+
+    let memedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
     UIGraphicsEndImageContext()
     
+    navigationBar.isHidden = false
     toolbar.isHidden = false
     
     return memedImage
   }
   
-  // MARK: Keybboard
-  
+  // MARK: Keybboard controlls
   func configKeyboard() {
     let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
     view.addGestureRecognizer(tap)
@@ -130,7 +153,6 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
   }
   
   // MARK: UIConfiguration
-  
   func configCamera() {
     cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
   }
@@ -169,8 +191,7 @@ class InitialViewController: UIViewController, UIImagePickerControllerDelegate, 
     imageView.reloadInputViews()
   }
   
-  @IBAction func buttonSharedPressed(_ sender: UIBarButtonItem) {
-    
+  @IBAction func buttonSharedPressed(_ sender: Any) {
     let memedImage = generateMemedImage()
     let activityViewController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
     self.present(activityViewController, animated: true, completion: nil)

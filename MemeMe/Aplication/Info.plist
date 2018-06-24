@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>MemeMe precisa de permissão para salvar a foto na galeria.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -26,10 +24,12 @@
 	<string>Precisamos usar suas fotos</string>
 	<key>NSCameraUsageDescription</key>
 	<string>precisamos usar sua camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>MemeMe precisa de permissão para salvar a foto na galeria.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
-	<string>Initial</string>
+	<string>Meme</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
