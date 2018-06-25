@@ -184,11 +184,7 @@ class CreateMemeViewController: UIViewController, UIImagePickerControllerDelegat
   }
   
   @IBAction func buttonCancelPressed(_ sender: UIBarButtonItem) {
-    imageView.image = nil
-    actionButton.isEnabled = false
-    topTextField.text = DefautsTexts.top
-    bottomTextField.text = DefautsTexts.bottom
-    imageView.reloadInputViews()
+    dismiss(animated: true, completion: nil)
   }
   
   @IBAction func buttonSharedPressed(_ sender: Any) {

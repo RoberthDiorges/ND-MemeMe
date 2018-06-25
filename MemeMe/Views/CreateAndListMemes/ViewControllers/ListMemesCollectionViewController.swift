@@ -24,11 +24,6 @@ class ListMemesCollectionViewController: UICollectionViewController {
     static let createMemeViewControllerIdentifier = "CreateMemeViewController"
   }
   
-  struct StoryboardNames {
-    static let createMemeStoryboardName = "CreateMeme"
-    static let detailsMemeStoryboardName = "DetailsMeme"
-  }
-  
   struct IdentifierSegues {
     static let kCollectionNewMemeSegue = "collectionNewMemeIdentifierSegue"
     static let kCollectionDetailsSegue = "collectionShowDetailIdentifierSegue"
@@ -80,9 +75,7 @@ class ListMemesCollectionViewController: UICollectionViewController {
   
   // MARK: UICollectionViewDelegate
   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    DispatchQueue.main.async {
-      self.performSegue(withIdentifier: IdentifierSegues.kCollectionDetailsSegue, sender: self.memes[indexPath.row])
-    }
+    self.performSegue(withIdentifier: IdentifierSegues.kCollectionDetailsSegue, sender: self.memes[indexPath.row])
   }
   
   @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
